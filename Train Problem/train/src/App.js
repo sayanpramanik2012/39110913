@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import AllTrainsPage from "./AllTrainsPage";
 import SingleTrainPage from "./SingleTrainPage";
 
@@ -15,14 +15,10 @@ function App() {
           </ul>
         </nav>
 
-        <Switch>
-          <Route path="/train/:id">
-            <SingleTrainPage />
-          </Route>
-          <Route path="/">
-            <AllTrainsPage />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/train/:id" element={<SingleTrainPage />} />
+          <Route path="/" element={<AllTrainsPage />} />
+        </Routes>
       </div>
     </Router>
   );
