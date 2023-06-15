@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-const trains = [
-  { id: 1, name: "Train 1", departure: "9:00 AM", arrival: "11:00 AM" },
-  { id: 2, name: "Train 2", departure: "10:30 AM", arrival: "1:00 PM" },
-  { id: 3, name: "Train 3", departure: "1:30 PM", arrival: "4:00 PM" },
-];
 
 const SingleTrainPage = () => {
   const { id } = useParams();
-  const train = trains.find((train) => train.id === parseInt(id));
+  const [train, setTrain] = useState(null);
+
+  useEffect(() => {
+    // Fetch train details from the API
+    const fetchTrainDetails = async () => {
+      try {
+        const response = await fetch(`API_ENDPOINT/train/${id}`, {
+          headers: {
+            Authorization: "Bearer AUTH_TOKEN",
+          },
+        });
+        const data = await response.json();
+        setTrain(data.train);
+      } catch (error) {
+        console.error("Error fetching train details:", error);
+      }
+    };
+
+    fetchTrainDetails();
+  }, [id]);
 
   if (!train) {
-    return <div>Train not found</div>;
+    return <div>Loading train details...</div>;
   }
 
   return (
@@ -20,6 +33,7 @@ const SingleTrainPage = () => {
       <h1>{train.name}</h1>
       <p>Departure: {train.departure}</p>
       <p>Arrival: {train.arrival}</p>
+      {/* Display seat availability, prices, delays, etc. */}
     </div>
   );
 };

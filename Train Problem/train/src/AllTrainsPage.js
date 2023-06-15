@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const trains = [
-  { id: 1, name: "Train 1", departure: "9:00 AM", arrival: "11:00 AM" },
-  { id: 2, name: "Train 2", departure: "10:30 AM", arrival: "1:00 PM" },
-  { id: 3, name: "Train 3", departure: "1:30 PM", arrival: "4:00 PM" },
-];
-
 const AllTrainsPage = () => {
+  const [trains, setTrains] = useState([]);
+
+  useEffect(() => {
+    // Fetch train data from the API
+    const fetchTrains = async () => {
+      try {
+        const response = await fetch("API_ENDPOINT/all-trains", {
+          headers: {
+            Authorization: "Bearer AUTH_TOKEN",
+          },
+        });
+        const data = await response.json();
+        setTrains(data.trains);
+      } catch (error) {
+        console.error("Error fetching train data:", error);
+      }
+    };
+
+    fetchTrains();
+  }, []);
+
   return (
     <div>
       <h1>All Trains</h1>
